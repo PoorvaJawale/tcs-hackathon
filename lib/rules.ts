@@ -10,9 +10,9 @@ type Signal = Indicator & { weight: number };
 
 /**
  * Deterministic, weighted scoring — the explainable backbone of the verdict.
- * The LLM layer can raise the risk level but never lower it below what these
- * rules establish, which keeps the tool resistant to prompt injection hidden
- * in the offer text.
+ * The returned score band is the source of truth for the final verdict. The
+ * LLM may explain signals and recommend checks, but it cannot override this
+ * level or create a score/verdict mismatch.
  */
 export function scoreOffer(
   entities: ExtractedEntities,
@@ -188,12 +188,12 @@ export function scoreOffer(
   return {
     score,
     level,
-    indicators: signals.map(({ weight: _weight, ...indicator }) => indicator),
+    indicators: signals.map(({ id, title, whyItMatters, severity, source }) => ({
+      id,
+      title,
+      whyItMatters,
+      severity,
+      source,
+    })),
   };
 }
-
-export const RISK_RANK: Record<RiskLevel, number> = {
-  safe: 0,
-  suspicious: 1,
-  high_risk: 2,
-};

@@ -4,7 +4,7 @@ import { redactPii } from "@/lib/redact";
 import { extractEntities } from "@/lib/extract";
 import { verifyCompany } from "@/lib/verify";
 import { scoreOffer } from "@/lib/rules";
-import { buildVerificationSteps, llmAssess, reconcile } from "@/lib/assess";
+import { buildVerificationSteps, llmAssess } from "@/lib/assess";
 import { checkRateLimit, clientKey } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
@@ -56,14 +56,15 @@ export async function POST(req: Request) {
     verification
   );
 
-  // 5. LLM reasoning layer + cautious reconciliation
+  // 5. LLM reasoning layer. The deterministic score band remains the final
+  // verdict so the label, color, and risk meter cannot contradict each other.
   const { assessment, degraded: reasoningDegraded } = await llmAssess(
     entities,
     verification,
     ruleIndicators,
     ruleLevel
   );
-  const verdict = reconcile(ruleLevel, assessment);
+  const verdict = ruleLevel;
 
   const ruleTitles = new Set(ruleIndicators.map((r) => r.title.toLowerCase()));
   const aiIndicators =

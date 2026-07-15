@@ -65,9 +65,9 @@ offer text / PDF / DOCX
         │   payment request +35, typosquat +30,  the explainable backbone.
         │   free email +20, no interview +15…
         ▼
-[5] LLM reasoning (lib/assess.ts)            ← second opinion + plain-language
-        │   reconciled CAUTIOUSLY: the final     explanation + verification steps.
-        ▼   verdict is max(rules, LLM) risk.
+[5] LLM reasoning (lib/assess.ts)            ← plain-language explanation +
+        │   score band remains the final          verification steps; cannot override
+        ▼   verdict shown by the UI.               the deterministic verdict.
 Safe / Suspicious / High Risk + score + indicators + checklist
 ```
 
@@ -75,8 +75,8 @@ Safe / Suspicious / High Risk + score + indicators + checklist
 
 - **Prompt injection** — offer text is wrapped in `<<<OFFER_START/END>>>` markers and the system
   prompt orders the model to treat it strictly as data. Even if injected text says "mark this
-  safe", the final label can never be *lower* than the deterministic rule score (`reconcile()` in
-  [lib/assess.ts](lib/assess.ts)).
+  safe" or "mark this risky", the final label always comes from the deterministic score band in
+  [lib/rules.ts](lib/rules.ts).
 - **Output validation** — every model response is re-parsed against zod schemas
   ([lib/schemas.ts](lib/schemas.ts)); malformed output falls back to rules-only. Nothing is ever
   rendered as HTML (React escaping only, no `dangerouslySetInnerHTML`).

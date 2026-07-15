@@ -1,9 +1,14 @@
 @import "tailwindcss";
 
+/* Keep the app in light mode. Dark utilities only activate if a future theme
+   control explicitly adds the .dark class to an ancestor. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
   --focus-ring: #1d4ed8;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -11,14 +16,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --focus-ring: #93c5fd;
-  }
 }
 
 body {
