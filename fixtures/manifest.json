@@ -1,0 +1,10 @@
+[
+  { "file": "fake-01-fee-scam.txt", "label": "Fake — ₹2,000 security fee, no interview", "category": "fake" },
+  { "file": "fake-02-urgent-no-interview.txt", "label": "Fake — 6-hour deadline, training kit charge", "category": "fake" },
+  { "file": "fake-03-typosquat.txt", "label": "Fake — lookalike domain (tatacommunication.com)", "category": "fake" },
+  { "file": "fake-04-too-good.txt", "label": "Fake — ₹85k/month for data entry", "category": "fake" },
+  { "file": "safe-01-corporate.txt", "label": "Safe — Infosys offer after campus interview", "category": "safe" },
+  { "file": "safe-02-tcs.txt", "label": "Safe — TCS offer via NextStep portal", "category": "safe" },
+  { "file": "outlier-01-rough-but-real.txt", "label": "Outlier — informal startup offer (real but rough)", "category": "outlier" },
+  { "file": "outlier-02-polished-scam.txt", "label": "Outlier — polished corporate-tone scam", "category": "outlier" }
+]
