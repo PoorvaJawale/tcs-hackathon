@@ -1,46 +1,218 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-/* Keep the app in light mode. Dark utilities only activate if a future theme
-   control explicitly adds the .dark class to an ancestor. */
-@custom-variant dark (&:where(.dark, .dark *));
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --focus-ring: #1d4ed8;
-  color-scheme: light;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-safe: var(--safe);
+  --color-safe-foreground: var(--safe-foreground);
+  --color-warn: var(--warn);
+  --color-warn-foreground: var(--warn-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.98 0.005 250);
+  --foreground: oklch(0.18 0.03 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.03 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.03 260);
+  --primary: oklch(0.55 0.19 265);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.95 0.01 260);
+  --secondary-foreground: oklch(0.25 0.04 260);
+  --muted: oklch(0.95 0.01 260);
+  --muted-foreground: oklch(0.45 0.02 260);
+  --accent: oklch(0.93 0.04 200);
+  --accent-foreground: oklch(0.25 0.04 260);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0.01 260);
+  --input: oklch(0.92 0.01 260);
+  --ring: oklch(0.55 0.19 265);
+
+  --safe: oklch(0.55 0.15 155);
+  --safe-foreground: oklch(0.99 0 0);
+  --warn: oklch(0.65 0.16 75);
+  --warn-foreground: oklch(0.2 0.05 60);
+  --danger: oklch(0.55 0.22 25);
+  --danger-foreground: oklch(0.99 0 0);
 }
 
-/* WCAG 2.2 AA: visible focus indicator on every interactive surface,
-   contrast-checked against both light and dark skins */
-:focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 2px;
-  border-radius: 4px;
+.dark {
+  --background: oklch(0.14 0.02 260);
+  --foreground: oklch(0.97 0.005 260);
+  --card: oklch(0.19 0.03 260);
+  --card-foreground: oklch(0.97 0.005 260);
+  --popover: oklch(0.19 0.03 260);
+  --popover-foreground: oklch(0.97 0.005 260);
+  --primary: oklch(0.72 0.18 265);
+  --primary-foreground: oklch(0.15 0.03 260);
+  --secondary: oklch(0.25 0.03 260);
+  --secondary-foreground: oklch(0.97 0.005 260);
+  --muted: oklch(0.25 0.03 260);
+  --muted-foreground: oklch(0.72 0.02 260);
+  --accent: oklch(0.3 0.06 200);
+  --accent-foreground: oklch(0.97 0.005 260);
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.72 0.18 265);
+
+  --safe: oklch(0.7 0.17 155);
+  --safe-foreground: oklch(0.14 0.02 260);
+  --warn: oklch(0.78 0.17 80);
+  --warn-foreground: oklch(0.15 0.05 60);
+  --danger: oklch(0.68 0.22 25);
+  --danger-foreground: oklch(0.14 0.02 260);
 }
 
-/* WCAG 2.2 / prefers-reduced-motion: instant or crossfade-only fallbacks
-   for every animated surface */
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(1200px 600px at 10% -10%, oklch(0.7 0.15 265 / 0.15), transparent 60%),
+      radial-gradient(900px 500px at 90% 0%, oklch(0.7 0.15 200 / 0.12), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@keyframes row-tilt {
+  0% {
+    transform: perspective(1200px) rotateX(0deg);
+    opacity: 0.55;
+  }
+  50% {
+    transform: perspective(1200px) rotateX(6deg);
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1200px) rotateX(0deg);
+    opacity: 0.55;
+  }
+}
+
+@utility grid-bg {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-border) 60%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-border) 60%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 32px 32px;
+}
+
+@keyframes card-reveal {
+  from {
+    opacity: 0;
+    transform: perspective(1200px) rotateX(-10deg) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1200px) rotateX(0deg) translateY(0);
+  }
+}
+
+@keyframes radial-wipe {
+  from {
+    clip-path: circle(0% at var(--wipe-x, 50%) var(--wipe-y, 50%));
+    opacity: 1;
+  }
+  to {
+    clip-path: circle(160% at var(--wipe-x, 50%) var(--wipe-y, 50%));
+    opacity: 0;
+  }
+}
+
+@keyframes dust-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx, 0), var(--dy, 0)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@utility row-tilt {
+  transform-style: preserve-3d;
+  animation: row-tilt 1.6s ease-in-out infinite;
+}
+
+@utility card-reveal {
+  animation: card-reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-style: preserve-3d;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
 }

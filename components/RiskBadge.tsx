@@ -2,54 +2,29 @@
 
 import NumberFlow from "@number-flow/react";
 import type { RiskLevel } from "@/lib/schemas";
+import { ShieldCheck, ShieldAlert, AlertTriangle } from "lucide-react";
 
-/* Status is always communicated by icon + label + color, never color alone
-   (WCAG 1.4.1). Text/background pairs are AA-contrast in both skins. */
 const CONFIG: Record<
   RiskLevel,
-  { label: string; classes: string; icon: React.ReactNode }
+  { label: string; classes: string; textClass: string; icon: any }
 > = {
   safe: {
     label: "Safe",
-    classes:
-      "bg-emerald-100 text-emerald-900 border-emerald-600 dark:bg-emerald-950 dark:text-emerald-200 dark:border-emerald-400",
-    icon: (
-      <svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6" aria-hidden="true">
-        <path
-          fillRule="evenodd"
-          d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
-          clipRule="evenodd"
-        />
-      </svg>
-    ),
+    classes: "bg-emerald-500/5 text-emerald-700 border-emerald-500/20 dark:bg-emerald-500/5 dark:text-emerald-400 dark:border-emerald-500/20",
+    textClass: "text-emerald-600 dark:text-emerald-400",
+    icon: ShieldCheck,
   },
   suspicious: {
     label: "Suspicious",
-    classes:
-      "bg-amber-100 text-amber-900 border-amber-600 dark:bg-amber-950 dark:text-amber-200 dark:border-amber-400",
-    icon: (
-      <svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6" aria-hidden="true">
-        <path
-          fillRule="evenodd"
-          d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
-          clipRule="evenodd"
-        />
-      </svg>
-    ),
+    classes: "bg-amber-500/5 text-amber-700 border-amber-500/20 dark:bg-amber-500/5 dark:text-amber-400 dark:border-amber-500/20",
+    textClass: "text-amber-600 dark:text-amber-400",
+    icon: AlertTriangle,
   },
   high_risk: {
     label: "High Risk",
-    classes:
-      "bg-red-100 text-red-900 border-red-600 dark:bg-red-950 dark:text-red-200 dark:border-red-400",
-    icon: (
-      <svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6" aria-hidden="true">
-        <path
-          fillRule="evenodd"
-          d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z"
-          clipRule="evenodd"
-        />
-      </svg>
-    ),
+    classes: "bg-red-500/5 text-red-700 border-red-500/20 dark:bg-red-500/5 dark:text-red-400 dark:border-red-500/20",
+    textClass: "text-red-600 dark:text-red-400",
+    icon: ShieldAlert,
   },
 };
 
@@ -63,25 +38,41 @@ export default function RiskBadge({
   confidence: number;
 }) {
   const cfg = CONFIG[verdict];
+  const Icon = cfg.icon;
+  
   return (
     <div
       role="status"
-      className={`flex flex-wrap items-center gap-4 rounded-xl border-2 p-5 ${cfg.classes}`}
+      className={`flex flex-col sm:flex-row sm:items-center gap-4 rounded-xl border p-5 ${cfg.classes} transition-all duration-300`}
     >
-      {cfg.icon}
-      <span className="text-2xl font-bold">{cfg.label}</span>
-      <span className="ml-auto flex items-baseline gap-4 text-sm font-medium">
-        <span>
-          Risk score:{" "}
-          {/* NumberFlow animates and honours prefers-reduced-motion natively */}
-          <NumberFlow value={score} className="text-lg font-bold tabular-nums" />
-          /100
-        </span>
-        <span>
-          Confidence:{" "}
-          <NumberFlow value={confidence} className="text-lg font-bold tabular-nums" />%
-        </span>
-      </span>
+      <div className="flex items-center gap-3">
+        <div className={`flex h-11 w-11 items-center justify-center rounded-xl bg-current/10 ${cfg.textClass}`}>
+          <Icon className="h-6 w-6" />
+        </div>
+        <div>
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">Security Verdict</span>
+          <span className="text-xl font-bold tracking-tight">{cfg.label}</span>
+        </div>
+      </div>
+      
+      <div className="sm:ml-auto flex items-center gap-6 border-t sm:border-t-0 border-card-border/50 pt-3 sm:pt-0 text-sm font-medium">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Risk Score</span>
+          <span className="text-base font-bold text-slate-900 dark:text-white">
+            <NumberFlow value={score} className="tabular-nums" />
+            <span className="text-xs font-normal text-slate-400">/100</span>
+          </span>
+        </div>
+        
+        <div className="h-8 w-px bg-card-border/60" />
+        
+        <div className="flex flex-col">
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Scan Confidence</span>
+          <span className="text-base font-bold text-slate-900 dark:text-white">
+            <NumberFlow value={confidence} className="tabular-nums" />%
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

@@ -34,8 +34,8 @@ function SortableStep({
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-start gap-3 rounded-lg border border-zinc-300 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900 ${
-        isDragging ? "opacity-70 shadow-lg" : ""
+      className={`flex items-start gap-3 rounded-lg border border-card-border bg-card p-3 shadow-sm ${
+        isDragging ? "opacity-75 shadow-md border-blue-500/35" : ""
       }`}
     >
       <button
@@ -43,22 +43,24 @@ function SortableStep({
         {...attributes}
         {...listeners}
         aria-label={`Reorder step: ${item.text.slice(0, 50)}`}
-        className="mt-0.5 shrink-0 cursor-grab touch-none rounded p-1 text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+        className="mt-0.5 shrink-0 cursor-grab touch-none rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors"
       >
         <svg viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5" aria-hidden="true">
           <path d="M7 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-1 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm9-13a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-1 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm1 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
         </svg>
       </button>
-      <label className="flex items-start gap-3">
+      <label className="flex items-start gap-3 cursor-pointer select-none">
         <input
           type="checkbox"
           checked={item.done}
           onChange={() => onToggle(item.id)}
-          className="mt-1 h-4 w-4 shrink-0 accent-blue-700 dark:accent-blue-400"
+          className="mt-1 h-4 w-4 shrink-0 rounded border-card-border text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400"
         />
         <span
           className={
-            item.done ? "text-zinc-500 line-through dark:text-zinc-400" : ""
+            item.done 
+              ? "text-slate-400 line-through dark:text-slate-500 transition-all" 
+              : "text-slate-700 dark:text-slate-300 text-sm font-medium"
           }
         >
           {item.text}
@@ -114,7 +116,7 @@ export default function ChecklistDnd({ steps }: { steps: string[] }) {
           ))}
         </ul>
       </SortableContext>
-      <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
+      <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
         Drag (or focus the handle and use Space + arrow keys) to reorder steps by
         priority; tick them off as you complete them.
       </p>
