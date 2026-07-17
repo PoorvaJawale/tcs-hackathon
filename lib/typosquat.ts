@@ -107,8 +107,12 @@ export function compareDomains(candidate: string, official: string): DomainMatch
   if (dist <= 2 && Math.min(cSld.length, oSld.length) >= 5) return "typosquat";
 
   // brand embedded with extra tokens: "infosys-careers" vs "infosys"
+  // Guard: only flag if candidate is ≤1.5× the brand length.
+  // This lets genuine sub-brands like "tatacommunications" (4.5× "tata") pass
+  // while still catching short impersonations like "infosys-hr" (1.4× "infosys").
   const cTokens = cSld.split(/[-_]/);
-  if (oSld.length >= 4 && (cTokens.includes(oSld) || cSld.includes(oSld))) {
+  const ratio = oSld.length > 0 ? cSld.length / oSld.length : Infinity;
+  if (oSld.length >= 4 && ratio <= 1.5 && (cTokens.includes(oSld) || cSld.includes(oSld))) {
     return "typosquat";
   }
 
