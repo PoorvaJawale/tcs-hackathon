@@ -1,6 +1,4 @@
-# Fake Internship Offer Detector
-
-**TCS Tech Day @ Vidyavardhini College of Engineering, Vasai — Theme: AI + Cyber Defense**
+# Verifly - Fake Job/Internship Offer Detector
 
 Students receive internship offers over email, WhatsApp and LinkedIn — some are scams that
 demand "registration fees", use lookalike company domains, or pressure students to respond in
